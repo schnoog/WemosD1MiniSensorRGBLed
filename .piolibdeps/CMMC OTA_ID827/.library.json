@@ -1,0 +1,39 @@
+{
+    "name": "CMMC OTA", 
+    "version": "1.0.4", 
+    "keywords": [
+        "communication"
+    ], 
+    "description": "CMMC OTA", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "platforms": [
+        "espressif8266"
+    ], 
+    "authors": [
+        {
+            "email": "nat.wrw@gmail.com", 
+            "url": null, 
+            "maintainer": true, 
+            "name": "Nat Weerawan"
+        }
+    ], 
+    "repository": {
+        "type": "git", 
+        "url": "https://github.com/cmmakerclub/CMMC_OTA"
+    }, 
+    "homepage": null, 
+    "export": {
+        "include": null, 
+        "exclude": [
+            "extras", 
+            "docs", 
+            "tests", 
+            "test", 
+            "*.doxyfile", 
+            "*.pdf"
+        ]
+    }, 
+    "id": 827
+}
