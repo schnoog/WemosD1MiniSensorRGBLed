@@ -11,11 +11,11 @@ unsigned long Timer4;
 void loop_master(){
     unsigned long NowIs = millis();
     if(UseWifi == 1){
-	ArduinoOTA.handle();
+        wifi_loop();
     }
 
 
-    if(Timer1 < NowIs - 1000){
+    if(Timer1 < NowIs - 1000){                      //LOOP FOR SENSOR REED
             val = digitalRead(SensorPin);
             if (lastval == 0){
                 if(val == 1){
@@ -26,6 +26,8 @@ void loop_master(){
     Timer1 = NowIs;
     }
 
+    colorset_loop();
+    webserver_loop();
 
 
 }

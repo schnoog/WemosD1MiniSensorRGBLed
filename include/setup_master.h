@@ -2,11 +2,10 @@
 
 void setup_master(){
 
-    if(UseWifi == 1){
-        Serial.begin(115200);
-        wifi_setup(); 
-    }
-
+    
+        wifi_setup();  //wifi, ota and SERIAL
+        colorset_setup();
+        webserver_setup();
     //pinMode(SensorPin, INPUT);
     //pinMode(RelayPin, OUTPUT);
 

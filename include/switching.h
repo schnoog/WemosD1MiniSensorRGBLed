@@ -2,8 +2,20 @@
 
 int switchStatus = 0;
 
-void SwitchPower(int PowerState){
 
+
+void SwitchPower(int PowerState){
+    if (PowerState == 1){
+    SERIAL.println("Switch LEDs on");
+        colorset_set(PinGreen,LevelGreen);
+        colorset_set(PinBlue,LevelBlue);
+        colorset_set(PinRed,LevelRed);
+    }else{
+    SERIAL.println("Switch LEDs off");        
+        colorset_set(PinGreen,0);
+        colorset_set(PinBlue,0);
+        colorset_set(PinRed,0);
+    }
     
 }
 
@@ -16,8 +28,8 @@ void SetSwitch(){
         switchStatus = 0;
         digitalWrite(RelayPin,RelayOFF);
     }
-
-Serial.print("Switched to " );
-Serial.println(switchStatus);
+SwitchPower(switchStatus);
+SERIAL.print("Switched to " );
+SERIAL.println(switchStatus);
 
 }

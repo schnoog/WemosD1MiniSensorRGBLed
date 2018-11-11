@@ -5,6 +5,44 @@
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 #include <ArduinoOTA.h>
 
+#include <TelnetSpy.h>
+TelnetSpy SerialAndTelnet;
+#define SERIAL  SerialAndTelnet
+
+
+void waitForConnection() {
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    SERIAL.print(".");
+  }
+  SERIAL.println(" Connected!");
+}
+
+void waitForDisconnection() {
+  while (WiFi.status() == WL_CONNECTED) {
+    delay(500);
+    SERIAL.print(".");
+  }
+  SERIAL.println(" Disconnected!");
+}
+
+void telnetConnected() {
+  SERIAL.println("Telnet connection established.");
+}
+
+void telnetDisconnected() {
+  SERIAL.println("Telnet connection closed.");
+}
+
+
+void telnet_setup(){
+  
+}
+
+void telnet_loop(){
+  SerialAndTelnet.handle(); 
+}
+
 
 void ota_setup(){
   ArduinoOTA.setPort(8266);
@@ -50,15 +88,24 @@ void ota_setup(){
 
 
 void wifi_setup(){
+    SerialAndTelnet.setWelcomeMsg("Welcome to the TelnetSpy example\n\n");
+    SerialAndTelnet.setCallbackOnConnect(telnetConnected);
+    SerialAndTelnet.setCallbackOnDisconnect(telnetDisconnected);
+    SERIAL.begin(115200);
+    delay(100); // Wait for serial port  
     //WiFiManager
     //Local intialization. Once its business is done, there is no need to keep it around
     WiFiManager wifiManager;
     //reset saved settings
     //wifiManager.resetSettings();
     wifiManager.autoConnect("AutoConnectAP");
-    Serial.println (WiFi.localIP());
-    Serial.println("connected...yeey :)");
+    SERIAL.println (WiFi.localIP());
+    SERIAL.println("connected...yeey :)");
     ota_setup();
+    telnet_setup();
 }
 
-
+void wifi_loop(){
+  ArduinoOTA.handle();
+  telnet_loop();
+}
