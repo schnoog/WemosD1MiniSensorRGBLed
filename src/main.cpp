@@ -5,8 +5,14 @@
 #define SensorPin 4 //D2
 #define RelayPin 5 //D1
 
+#define PinGreen 12
+#define PinRed 13
+#define PinBlue 14
+
 #define RelayON 1
 #define RelayOFF 0
+
+
 
 
 #include "wifi_and_ota.h"

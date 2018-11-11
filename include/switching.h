@@ -2,6 +2,11 @@
 
 int switchStatus = 0;
 
+void SwitchPower(int PowerState){
+
+    
+}
+
 
 void SetSwitch(){
     if(switchStatus == 0){
