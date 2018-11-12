@@ -1,4 +1,4 @@
-const char WEBINTERFACE[] PROGMEM = R"=====(
+const char WEBINTERFACE_A[] PROGMEM = R"=====(
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 
@@ -34,7 +34,12 @@ const char WEBINTERFACE[] PROGMEM = R"=====(
       // Option guide: https://rakujira.jp/projects/iro/docs/guide.html#Color-Picker-Options
       width: size,
       height: size,
-      color: {r: 0, g: 0, b: 0},
+      color: )=====";
+      
+      
+
+const char WEBINTERFACE_B[] PROGMEM = R"=====(
+
       anticlockwise: true,
       borderWidth: 10,
       borderColor: "#313131"
@@ -63,6 +68,10 @@ const char WEBINTERFACE[] PROGMEM = R"=====(
         });
     });
   </script>
+  <hr><center>
+  <a href="/admin">Direkteingabe</a>
+  <br /><a href="/reset">Reset</a>
+  </center>
 </body>
 </html>
 )=====";

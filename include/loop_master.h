@@ -6,20 +6,27 @@ unsigned long Timer1;
 unsigned long Timer2;
 unsigned long Timer3;
 unsigned long Timer4;
-
+int intT1Wait = 1;
+int intT2Wait;
+int intT3Wait;
+int intT4Wait;
 
 void loop_master(){
+    
     unsigned long NowIs = millis();
     if(UseWifi == 1){
         wifi_loop();
     }
 
+    filework_loop();
 
-    if(Timer1 < NowIs - 1000){                      //LOOP FOR SENSOR REED
+    if(Timer1 < NowIs - intT1Wait){                      //LOOP FOR SENSOR REED
+            intT1Wait = 1;
             val = digitalRead(SensorPin);
             if (lastval == 0){
                 if(val == 1){
                     SetSwitch();
+                    intT1Wait = 1000;
                 }
             }
             lastval = val;

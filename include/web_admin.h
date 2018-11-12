@@ -133,5 +133,6 @@ const char WEBADMIN[] PROGMEM = R"=====(
     });
     </script>
   </body>
+  <hr><center><a href="/ui">UI</a><br /><a href="/reset">Reset</a></center>
 </html>
 )=====";

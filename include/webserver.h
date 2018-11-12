@@ -69,7 +69,7 @@ RGB hsvToRgb(double h, double s, double v) {
 }
 
 void handleRoot() {
-  server.send(200, "text/plain", "hello from esp8266 wifi rgb!");
+  server.send(200, "text/html", "<!DOCTYPE html><html><head>   <!-- HTML meta refresh URL redirection -->   <meta http-equiv='refresh'   content='0; url=/ui'></head><body>   <p>The page has moved to:   <a href='/ui'>this page</a></p></body></html>");
 }
 
 
@@ -202,9 +202,9 @@ void handleApiRequest() {
     analogWrite(PinRed, mappedRed);
     analogWrite(PinGreen, mappedGreen);
     analogWrite(PinBlue, mappedBlue);
-    LevelRed = (int)mappedRed;
-    LevelGreen = (int)mappedGreen;
-    LevelBlue = (int)mappedBlue;
+    SetLevelRed ( (int)mappedRed );
+    SetLevelGreen ((int)mappedGreen ) ;
+    SetLevelBlue ((int)mappedBlue);
 
     server.send(200, "application/json", server.arg("plain"));
 }
@@ -217,11 +217,16 @@ void resetOutputs() {
   analogWrite(PinRed, 0);
   analogWrite(PinGreen, 0);
   analogWrite(PinBlue, 0);
-    LevelRed = 0;
-    LevelGreen = 0;
-    LevelBlue = 0;  
+    SetLevelRed(0);
+    SetLevelGreen(0);
+    SetLevelBlue(0);  
 }
 
+void resetESP(){
+  ESP.restart();
+  delay(1000);
+  ESP.reset();
+}
 
 
 
@@ -242,7 +247,9 @@ void webserver_setup(){
 
   // iro.js User Interface and Javascript
   server.on("/ui", HTTP_GET, []() {
-    server.send_P(200, "text/html", WEBINTERFACE);
+    String ColorMe = "{r: " + (String)LevelRed  + ", g: " + (String)LevelGreen + ", b: " + (String)LevelBlue +"},";
+    String strOUT = (String)WEBINTERFACE_A + ColorMe + (String)WEBINTERFACE_B;
+    server.send_P(200, "text/html", strOUT.c_str());
   });
   server.on("/admin", HTTP_GET, []() {
     server.send_P(200, "text/html", WEBADMIN);
@@ -254,7 +261,7 @@ void webserver_setup(){
   // REST-API
   server.on("/api/v1/state", HTTP_POST, handleApiRequest);
   server.on("/api/v1/reset", HTTP_GET, resetOutputs);
-
+  server.on("/reset", HTTP_GET, resetESP);
   server.begin();
 }
 
