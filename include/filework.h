@@ -20,6 +20,11 @@ void filework_setup(){
         f.println("255");
         f.close();
     }    
+    if (!SPIFFS.exists("/Dimm.txt")){
+        File f = SPIFFS.open("/Dimm.txt", "w");
+        f.println("100");
+        f.close();
+    }
 
 }
 void filework_loop(){
@@ -86,4 +91,26 @@ int GetBlue(){
     String s=f.readStringUntil('\n');
     int out = s.toInt();
     return out;
+}
+
+int GetDimm(){
+    File f = SPIFFS.open("/Dimm.txt", "r");
+    if (!f) {
+        SERIAL.println("Coulnd't open file");
+        return 100;
+    }
+    String s=f.readStringUntil('\n');
+    int out = s.toInt();
+    
+    return out;
+}
+
+void SetDimm(int DimmLevel){
+    File f = SPIFFS.open("/Dimm.txt", "w");
+    if (!f) {
+        SERIAL.println("Coulnd't open file");
+        
+    }
+    f.println(DimmLevel);
+    f.close();    
 }

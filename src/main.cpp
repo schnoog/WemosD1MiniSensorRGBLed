@@ -1,3 +1,5 @@
+#define mdebug 1
+
 #include <Arduino.h>
 
 #define UseWifi 1
@@ -8,6 +10,7 @@
 #define PinBlue 13 //fixed
 #define RelayON 1
 #define RelayOFF 0
+
 
 
 #include "wifi_and_ota.h"

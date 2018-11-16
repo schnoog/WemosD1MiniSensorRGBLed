@@ -210,16 +210,7 @@ void handleApiRequest() {
 }
 
 void resetOutputs() {
-  analogWrite(PinRed, 255);
-  analogWrite(PinGreen, 255);
-  analogWrite(PinBlue, 255);
-  
-  analogWrite(PinRed, 0);
-  analogWrite(PinGreen, 0);
-  analogWrite(PinBlue, 0);
-    SetLevelRed(0);
-    SetLevelGreen(0);
-    SetLevelBlue(0);  
+ 
 }
 
 void resetESP(){

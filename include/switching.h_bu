@@ -1,0 +1,141 @@
+
+
+int switchStatus = 0;
+unsigned long LastTrigger;
+unsigned long LastChange;
+unsigned long debounce = 200;
+unsigned long CycleStart;
+unsigned long SwitchCycleLength = 50;
+int cycles_to_average = 50;
+float cycles_successrate = 0.8;
+int switchtime = 500;
+
+
+void SwitchPower(int PowerState){
+    if (PowerState == 1){
+    SERIAL.println("Switch LEDs on");
+        colorset_set(PinGreen,LevelGreen);
+        colorset_set(PinBlue,LevelBlue);
+        colorset_set(PinRed,LevelRed);
+    }else{
+    SERIAL.println("Switch LEDs off");        
+        colorset_set(PinGreen,0);
+        colorset_set(PinBlue,0);
+        colorset_set(PinRed,0);
+    }
+    
+}
+
+
+void SetSwitch(){
+    if(switchStatus == 0){
+        switchStatus = 1;
+        digitalWrite(RelayPin,RelayON);
+    }else{
+        switchStatus = 0;
+        digitalWrite(RelayPin,RelayOFF);
+    }
+SwitchPower(switchStatus);
+SERIAL.print("Switched to " );
+SERIAL.println(switchStatus);
+
+}
+
+
+
+void SensorWork(){
+    static int intNewVal;
+    static int intOldVal;
+    static int intcycle;
+    static int intsum;
+    static int subcnt;
+    float avg;
+    
+    unsigned long lc;
+    int changed = 0;
+
+/*
+unsigned long CycleStart;
+unsigned long SwitchCycleLength;
+*/
+    intNewVal = digitalRead(SensorPin);
+    if(CycleStart < 1){
+        CycleStart = millis();
+        SERIAL.print("Collecting ");
+    }
+    if(CycleStart + SwitchCycleLength > millis()){
+
+        intcycle++;
+        intsum += intNewVal;
+    }else{
+        CycleStart = millis();
+        subcnt++;
+        if(subcnt == 10){
+        SERIAL.println("Done");
+        subcnt  = 0;
+        }        
+            avg = (float)intsum / (float)intcycle;
+            intcycle = 0;
+            intsum = 0;
+            if (avg >= cycles_successrate){
+                intNewVal = 1;
+            }else{
+                intNewVal = 0;
+            }
+
+            changed = 0;
+            if( intNewVal != intOldVal){
+                if (intNewVal == 1){
+                    LastTrigger = millis();
+                }
+                
+                changed = 1;
+                SERIAL.print(millis());
+                SERIAL.print(":    Changed from ");
+                SERIAL.print(intOldVal);
+                SERIAL.print(" to ");
+                SERIAL.println(intNewVal);
+                intOldVal = intNewVal;
+            }
+
+            if(intNewVal == 1){
+                        //check for press duration
+                    if(LastTrigger + switchtime < millis()){  //wenn laenger als switchtime gehalten
+                        colorset_dimmdowm(); //dimmen
+                        LastTrigger = millis();
+
+                    }
+            }else{
+                if(changed == 1){
+                    if(LastTrigger + switchtime < millis()){   //wenn kuezer als switchtime getriggert
+                        SetSwitch();
+                    }
+                    LastTrigger = 0;
+                    changed = 0;
+                }
+            }
+
+
+
+    }
+
+
+
+
+    //    if(intNewVal == 1 && LastTrigger < NowIs - debounce)
+/*
+            if ( intNewVal != intOldVal){
+                SERIAL.print("Changed from ");
+                SERIAL.print(intOldVal);
+                SERIAL.print(" to ");
+                SERIAL.println(intNewVal);
+                intOldVal = intNewVal;
+                int changed = 1;
+            }
+*/
+    //    LastTrigger = NowIs;
+    //    }else{
+
+    //    }
+
+}
