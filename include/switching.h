@@ -16,7 +16,7 @@ void SwitchPower(int PowerState){
     SERIAL.println("Switch LEDs off");        
         SetNewDimm(0);
     }
-    }
+    }   
 }
 
 

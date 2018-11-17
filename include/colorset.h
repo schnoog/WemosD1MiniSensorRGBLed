@@ -13,7 +13,25 @@ int DimmStepDelay = 100;
 int switchStatus;
 
 
-
+void setMaxCorrelation(){
+    int Max = 255;
+    float fac1;
+    float fac2;
+    float MaxF;
+    MaxF = (float)Max;
+    fac1 = MaxF / LevelRed;
+    fac2 = MaxF / LevelBlue;
+    if (fac2 < fac1){fac1 = fac2;}
+    fac2 = MaxF / LevelGreen;
+    if (fac2 < fac1){fac1 = fac2;}
+    fac1 = fac1 * 100;
+    LevelRed = ((int)fac1 * LevelRed);
+    LevelBlue = ((int)fac1 * LevelBlue);
+    LevelGreen = ((int)fac1 * LevelGreen);
+    LevelRed = LevelRed / 100;
+    LevelBlue = LevelBlue / 100;
+    LevelGreen = LevelGreen / 100;
+}
 
 void SetLevelRed(int Red){
     LevelRed = Red;
@@ -46,6 +64,7 @@ void colorset_setup(){
     LevelGreen = GetGreen();
     LevelBlue = GetBlue();
     LevelDimm = GetDimm();
+    setMaxCorrelation();
     colorset_set(PinGreen,LevelGreen);
     colorset_set(PinBlue,LevelBlue);
     colorset_set(PinRed,LevelRed);
@@ -60,6 +79,7 @@ void SetNewDimm(int NeDimm){
     LevelRed = GetRed();
     LevelGreen = GetGreen();
     LevelBlue = GetBlue();
+    setMaxCorrelation();
     LevelDimm = GetDimm();
     colorset_set(PinGreen,LevelGreen);
     colorset_set(PinBlue,LevelBlue);
