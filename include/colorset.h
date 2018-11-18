@@ -8,8 +8,8 @@ int LevelRed = 255;
 int LevelGreen = 5;
 int LevelBlue =5;
 int LevelDimm = 100;
-int DimmStep = 5;
-int DimmStepDelay = 100;
+int DimmStep = 10;
+int DimmStepDelay = 750;
 int switchStatus;
 
 
@@ -60,6 +60,7 @@ void colorset_set(int SPIN, int color){
 
 void colorset_setup(){
     analogWriteRange(255);
+    analogWriteFreq(64000);
     LevelRed = GetRed();
     LevelGreen = GetGreen();
     LevelBlue = GetBlue();
@@ -74,16 +75,41 @@ void colorset_setup(){
 
 
 void SetNewDimm(int NeDimm){
+    static int lastDimm;
+
     LevelDimm = NeDimm;
     SetDimm(LevelDimm);
     LevelRed = GetRed();
     LevelGreen = GetGreen();
     LevelBlue = GetBlue();
     setMaxCorrelation();
-    LevelDimm = GetDimm();
+    
+    if(NeDimm > lastDimm){
+        for (int i = lastDimm; i <= NeDimm; i++){
+            LevelDimm = i;
+            colorset_set(PinGreen,LevelGreen);
+            colorset_set(PinBlue,LevelBlue);
+            colorset_set(PinRed,LevelRed);
+            delay(2); 
+        }
+    }
+    if(NeDimm < lastDimm){
+        for (int i = lastDimm; i >= NeDimm; i--){
+            LevelDimm = i;
+            colorset_set(PinGreen,LevelGreen);
+            colorset_set(PinBlue,LevelBlue);
+            colorset_set(PinRed,LevelRed); 
+            delay(10);
+        }
+    }
+    LevelDimm = GetDimm(); 
+
     colorset_set(PinGreen,LevelGreen);
     colorset_set(PinBlue,LevelBlue);
-    colorset_set(PinRed,LevelRed);    
+    colorset_set(PinRed,LevelRed); 
+
+
+    lastDimm = NeDimm;   
 }
 
 void colorset_dimmdowm(){

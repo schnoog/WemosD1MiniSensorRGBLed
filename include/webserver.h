@@ -176,7 +176,7 @@ void handleApiRequest() {
     SERIAL.print("r=");
     SERIAL.print(rgb.r);
     SERIAL.print(", g=");
-    SERIAL.print(rgb.g);
+    SERIAL.print(rgb.g);  
     SERIAL.print(", b=");
     SERIAL.println(rgb.b);
 
@@ -219,6 +219,14 @@ void resetESP(){
   ESP.reset();
 }
 
+void setdim(){
+    SERIAL.print("Server args:");
+    SERIAL.println(server.arg("level"));
+    int DL = server.arg("level").toInt();
+    if(DL > 100){DL = 100;}
+    SetNewDimm(DL);
+    server.send(200, "text/plain", (String)DL);
+}
 
 
 
@@ -253,6 +261,7 @@ void webserver_setup(){
   server.on("/api/v1/state", HTTP_POST, handleApiRequest);
   server.on("/api/v1/reset", HTTP_GET, resetOutputs);
   server.on("/reset", HTTP_GET, resetESP);
+  server.on("/dim",HTTP_GET,setdim);
   server.begin();
 }
 

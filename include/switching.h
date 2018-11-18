@@ -2,7 +2,7 @@
 #include <Bounce2.h>
 Bounce debouncer = Bounce(); // Instantiate a Bounce object
 
-int LongPress = 500;
+int LongPress = 1000;
 int ResetFullLength = 30000;
 int FullSwitchDelay = 1000;
 
